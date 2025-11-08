@@ -3,18 +3,17 @@ import HomeScreen from '../screens/HomeScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 
 export type TabsParamList = {
-    Home: undefined;
+    Home: {newItem?: string} | undefined;
     Profile: undefined;
 }
 
-const Tab = createBottomTabNavigator <TabsParamList>();
+const Tab = createBottomTabNavigator<TabsParamList>();
 
-export default function TabsNavigator(){
+export default function TabsNavigator() {
     return(
         <Tab.Navigator>
-            <Tab.Screen name = "Home" component={HomeScreen} options={{title: 'Inicio'}}/>
-            <Tab.Screen name = "Profile" component={ProfileScreen} options={{title: 'Perfil'}}/>
+            <Tab.Screen name="Home" component={HomeScreen} options={{title: 'Inicio'}}/>
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{title: 'Perfil'}}/>
         </Tab.Navigator>
-        
     );
 }

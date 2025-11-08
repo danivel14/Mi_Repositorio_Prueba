@@ -2,13 +2,22 @@ import { useState } from "react";
 import { View, Text,StyleSheet, Alert } from "react-native";
 import CustomInput from "../components/CustomInput";
 import CustomButton from "../components/CustomButton";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function LoginScreen({navigation} : any) {
   const [email, setEmail] = useState('');
 
+  const {login, isAllowed} = useAuth();
+
   const handleLogin = () => {
     try {
+      const allowed = login(email);
+      if (allowed){
+        console.log("Allowed login if: "+allowed)
         navigation.navigate('tabs');
+      }
+        console.log("Allowed en login: "+allowed)
+        
     } catch (error) {
         console.log(error);
     }

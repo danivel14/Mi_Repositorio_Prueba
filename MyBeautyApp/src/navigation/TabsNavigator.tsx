@@ -6,9 +6,7 @@ export type TabsParamList = {
     Home: {newItem?: string} | undefined;
     Profile: undefined;
 }
-
 const Tab = createBottomTabNavigator<TabsParamList>();
-
 export default function TabsNavigator() {
     return(
         <Tab.Navigator>

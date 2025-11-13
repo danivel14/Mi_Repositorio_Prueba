@@ -1,8 +1,8 @@
-import React, {createContext, useContext, useState} from "react";
+import React, { createContext, useContext, useState } from "react";
 
-type User= {
+type User = {
     email: string;
-} | null
+}| null;
 
 type AuthContextType = {
     user: User | null;
@@ -11,33 +11,32 @@ type AuthContextType = {
     logout: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | null> (null);
+const AuthContext = createContext<AuthContextType | null>(null);
 
 export const useAuth = () => {
-    const context = useContext(AuthContext)
-    if(!context) throw new Error('useAuth debe usarse dentro de AuthProvider');
+    const context = useContext(AuthContext);
+    if (!context) throw new Error('useAuth debe usarse dentro de AuthProvider');
     return context;
 }
 
-export const AuthProvider = ({children}: {children:React.ReactNode}) =>{
+export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<User>(null);
     const [isAllowed, setIsAllowed] = useState<boolean>(false);
 
     const login = (email: string): boolean => {
         const allowed = email.endsWith('.edu');
-        if (allowed) {
+        if (allowed){
             setUser({email})
             setIsAllowed(allowed)
         }
-        console.log("Allowed login if: "+allowed)
         return allowed;
-    }   
+    }
 
     const logout = () => {
         setUser(null);
         setIsAllowed(false);
     }
-    
+
     return (
         <AuthContext.Provider value={{user, isAllowed, login, logout}}>
             {children}

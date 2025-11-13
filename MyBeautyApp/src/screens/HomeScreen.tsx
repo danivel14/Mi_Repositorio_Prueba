@@ -7,9 +7,6 @@ const [ items, setItems] = useState<string[]> ([]);
 
 const routeItem = route.params?.newItem;
 
-useEffect(()=>{
-    console.log('item por parametros: ' + routeItem);
-}, [])
 
 const handleRegisterService = () =>{
 navigation.navigate('ServiceRegistry');

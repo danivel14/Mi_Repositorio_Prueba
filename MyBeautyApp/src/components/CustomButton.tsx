@@ -1,48 +1,71 @@
-import { Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import React from "react";
+import { TouchableOpacity, Text, StyleSheet } from "react-native";
+import { useTheme } from "../contexts/ThemeContext";
+import { getThemeColors } from "../utils/theme";
 
-// Rename 'Props' to a more descriptive name, e.g., 'CustomButtonProps'
-// Also, remove the 'variant' prop and use 'type' consistently.
-type CustomButtonProps = {
+type Variant = "primary" | "secondary";
+
+interface CustomButtonProps {
   title: string;
   onPress: () => void;
-  type?: 'primary' | 'secondary' | 'tertiary'; // This is the prop we want to use
-  // If you want to keep 'variant' for styling, you'd need to reconcile them.
-  // For now, let's assume 'type' is the main styling differentiator.
-};
+  variant?: Variant;
+}
 
 export default function CustomButton({
   title,
   onPress,
-  type = "primary", // Use 'type' here as well, with a default value
-}: CustomButtonProps) { // Use the updated Props type
-
-  // The styles should now be based on 'type'
-  const styles = getStyles(type);
+  variant = "primary",
+}: CustomButtonProps) {
+  const { theme } = useTheme();
+  const colors = getThemeColors(theme);
+  const isPrimary = variant === "primary";
 
   return (
-    <View style={{ width: '90%', marginVertical: 5 }}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={styles.buttonTitle}>{title}</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      activeOpacity={0.85}
+      style={[
+        styles.base,
+        isPrimary
+          ? { backgroundColor: colors.primary,
+           }
+          : {
+              backgroundColor: colors.backgroundAlt,
+              borderColor: colors.border,
+              borderWidth: 1,
+            },
+      ]}
+      onPress={onPress}
+    >
+      <Text
+        style={[
+          styles.text,
+          { color: colors.text },
+        ]}
+      >
+        {title}
+      </Text>
+    </TouchableOpacity>
   );
 }
 
-// Update getStyles to accept 'type'
-const getStyles = (type: 'primary' | 'secondary' | 'tertiary') => // Updated type
-  StyleSheet.create({
-    button: {
-      borderRadius: 8,
-      paddingVertical: 14,
-      alignItems: 'center',
-      // Apply styles based on 'type'
-      backgroundColor: type === "primary" ? '#1A1A33' : (type === "secondary" ? '#E8E6FA' : 'transparent'),
-      borderWidth: type === "tertiary" ? 1 : 0, // Tertiary might have a border
-      borderColor: type === "tertiary" ? '#1A1A33' : 'transparent', // Example tertiary border color
-    },
-    buttonTitle: {
-      color: type === "primary" ? '#fff' : (type === "secondary" ? '#000' : '#1A1A33'), // Adjust colors
-      fontWeight: 'bold',
-      fontSize: 16,
-    },
-  });
+const styles = StyleSheet.create({
+  base: {
+    width: "100%",
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    borderRadius: 999,
+    marginVertical: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.18,
+    shadowRadius: 10,
+    elevation: 4,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#F9FAFB",
+  },
+});

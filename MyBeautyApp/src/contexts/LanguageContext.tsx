@@ -9,7 +9,7 @@ type LanguageContextProps = {
     language: Language;
     changeLanguage: (lng: Language) => void;
 }
-
+// tarea: implementar diccionario desde archivo en utils
 //1. definir diccionario
 // const translations = { 
 // en: {signIn: 'Sign In', welcome: 'Welcome'},
@@ -17,12 +17,11 @@ type LanguageContextProps = {
 // fr: {signIn: 'Connexion', welcome: 'Bienvenue'},
 // de: {signIn: 'Anmelden', welcome: 'Wilkommen'},
 // }
-
-//2. crear instancia de i18n con diccionario cargado
+//2. crear instancia de i18n con diccionario cargado desde utils para no definirlo en el contexto
 const i18n = new I18n(transltns);
 
 //3. definir idioma por defecto 
-i18n.defaultLocale = "de";
+i18n.defaultLocale = "en";
 i18n.enableFallback = true;
 
 const LanguageContext = createContext<LanguageContextProps | null>(null);
@@ -62,4 +61,4 @@ export const LanguageProvider = ({children}: {children: React.ReactNode}) => {
     );
 }
 
-export {i18n};
+export {i18n}

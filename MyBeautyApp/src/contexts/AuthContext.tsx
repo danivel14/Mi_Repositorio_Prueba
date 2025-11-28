@@ -1,13 +1,17 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "../services/supabaseClient";
+import { Alert } from "react-native";
 
 type User = {
-    email: string;
+    id: string;
+    email?: string;
+    token: string;
 }| null;
 
 type AuthContextType = {
     user: User | null;
     isAllowed: boolean;
-    login: (email:string) => boolean;
+    login: (email:string) => Promise<void>;
     logout: () => void;
 }
 
@@ -23,18 +27,35 @@ export const AuthProvider = ({children}: {children: React.ReactNode}) => {
     const [user, setUser] = useState<User>(null);
     const [isAllowed, setIsAllowed] = useState<boolean>(false);
 
-    const login = (email: string): boolean => {
-        const allowed = email.endsWith('.edu');
-        if (allowed){
-            setUser({email})
-            setIsAllowed(allowed)
+    useEffect(()=>{
+        const restoreSession = async () =>{
+            const {data, error} = await supabase.auth.getSession();
+            
         }
-        return allowed;
+
+    },[])
+
+
+    const login = async (email: string, password: string) => {
+        const {data, error} = await supabase.auth.signInWithPassword({
+            email, 
+            password
+        });
+        if (error){
+            Alert.alert("Error al iniciar sesion", error.message)
+        };
+        if(data.session && data.user) {
+            setUser({
+                id: data.user.id,
+                email: data.user.email,
+                token: data.session.access_token,
+            })
+        }
     }
 
-    const logout = () => {
+    const logout = async () => {
+        await supabase.auth.signOut();
         setUser(null);
-        setIsAllowed(false);
     }
 
     return (

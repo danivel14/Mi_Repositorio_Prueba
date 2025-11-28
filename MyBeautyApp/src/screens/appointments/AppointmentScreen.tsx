@@ -3,7 +3,7 @@ import CustomInput from "../../components/CustomInput";
 import { useState } from "react";
 import CustomButton from "../../components/CustomButton";
 
-export default function ServiceRegistryScreen({navigation}: any){
+export default function AppointmentScreen({navigation}: any){
     const [item, setItem] = useState('');
 
     const handleOnSave = () => {
